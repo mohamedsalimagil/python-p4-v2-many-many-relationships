@@ -30,6 +30,10 @@ class Employee(db.Model):
     # Relationship mapping the employee to related meetings
     meetings = db.relationship(
         'Meeting', secondary=employee_meetings, back_populates='employees')
+    
+    # Relationship mapping the employee to related assignments
+    assignments = db.relationship(
+        'Assignment', back_populates='employee', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'<Employee {self.id}, {self.name}, {self.hire_date}>'
@@ -57,6 +61,8 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     budget = db.Column(db.Integer)
+    # Relationship mapping the project to related assignments
+    assignments = db.relationship('Assignment', back_populates='project',cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'<Review {self.id}, {self.title}, {self.budget}>'
