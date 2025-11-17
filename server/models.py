@@ -60,3 +60,25 @@ class Project(db.Model):
 
     def __repr__(self):
         return f'<Review {self.id}, {self.title}, {self.budget}>'
+    
+# Association Model to store many-to-many relationship between employee and project
+class Assignment(db.Model):
+    __tablename__ = 'assignments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    role = db.Column(db.String)
+    start_date = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
+
+    # Foreign key to store the employee id
+    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'))
+    # Foreign key to store the project id
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+
+    # Relationship mapping the assignment to related employee
+    employee = db.relationship('Employee', back_populates='assignments')
+    # Relationship mapping the assignment to related project
+    project = db.relationship('Project', back_populates='assignments')
+
+    def __repr__(self):
+        return f'<Assignment {self.id}, {self.role}, {self.start_date}, {self.end_date}, {self.employee.name}, {self.project.title}>'
